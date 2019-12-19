@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <title>Pomodoro Clock: by Lis and Albert</title>
+	<style>
+		body {
+			background-color: #1c1c1c;
+		}
+
+		#container {
+			display: flex;
+			flex-direction:column;
+			text-align:center;
+			background-color: #2d2d2d;
+			height: 400px;
+			width: 500px;
+		}
+
+		.session_break_container { 
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+		}
+
+		.session_container{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.break_container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+		.button_container {
+			flex-direction: row;
+		}
+
+		.display_container{
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+		}
+
+		.mode_container{
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+		}
+
+		.label{
+			font-size: 15px;
+			font-weight:bold;
+		}
+
+		.increment_button{
+			
+			display: inline-block;
+			height: 20px;
+		}
+
+		.mode_button{
+			
+			display: inline-block;
+			height: 35px;
+		}
+
+		#time{
+			text-align:center;
+			font-size: 30px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>  
+    <div id="container">
+        <h1 class="title">Pomodoro Clock</h1> 
+            <div class="session_break_container">
+                <div class="session_container"> 
+                    <h4 class="label">Session</h4> 
+                    <div class="button_container"> 
+                        <button id="session_increment_button" class="increment_button">+</button>
+                        <span id="session">25</span>
+                        <button class="increment_button" id="session_decrement_button">-</button>
+                    </div>
+                </div>
+                
+                <div class="break_container">
+                    <h4 class="label">Break</h4>
+                    <div class ="button_container">
+                        <button class="increment_button" id="break_increment_button">+</button>
+                        <span id="break">5 min</span>
+                        <button class="increment_button" id="break_decrement_button">-</button>
+                    </div>
+                </div>
+            </div> 
+        <div class="display_container">
+            <span id="time"></span>
+        </div>
+
+        <div class="mode_container">
+            <button id="start" class="mode_button">START</button>
+            <button id="reset" class="mode_button">RESET</button>
+            
+            <button id="pause" class="mode_button">PAUSE</button>
+            <button id="stop" class="mode_button">STOP</button></div>
+        </div>
+<script>
+			/*
+			TODO: 
+				
+				-Countdown timer (initiates with start button)
+						#time converts to ms
+						do the countdown
+						display it converted back to min:ss
+						set upper/lower bounds for timer
+				- After countdown for the session, 
+					Alert with sound break mode and start countdown from set break time
+				- Reset, Stop, Pause button functionality 
+				- Display/Sound indications for different modes
+				-presentation
+				-try different jquery methods for increment/decrement functions (abstracting)
+		**/
+	$(document).ready(function() {
+	
+
+
+
+		function stringToNum(string){
+			return parseInt(string);
+		}
+
+
+// Controls 
+		function increment(string){
+			return stringToNum(string) + 1;
+			
+		}
+
+		function decrement(string){
+			return stringToNum(string) - 1;
+		}
+// Event Listeners for control buttons
+		$('#session_increment_button').click(function(){
+			$('#session').html( increment($('#session').html()));
+		});	
+
+		$('#session_decrement_button').click(function(){
+			$('#session').html(decrement($('#session').html()));
+		});	
+
+		$('#break_increment_button').click(function(){
+			$('#break').html(increment($('#break').html()));
+		});	
+
+		$('#break_decrement_button').click(function(){
+			$('#break').html(decrement($('#break').html()));
+		});	
+		
+		// calculate time/ convert values
+		var msInSecond = 1000;
+		var secondsInMinute = 60;
+		var msInMinute = msInSecond * secondsInMinute;
+		
+		function minToMs(minNum){
+			return minNum * msInMinute;
+		}
+		
+		function msToMin(ms){
+			return ms / secondsInMinute / msInSecond;
+		}
+		var sessionDuration = minToMs(25);
+		window.setInterval(() => { 
+			
+			let now = new Date().getTime();
+			let distance = new Date(sessionDuration).getTime() - now;
+			console.log("now: ", now, " newDate: ", " distance: ", distance);		
+			
+			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+			
+			// console.log("date: ", date, "typeOf date: ", typeof date);		
+			// let seconds = Math.floor(distance % (msInSecond * secondsInMinute * secondsInMinute)/ (msInSecond * secondsInMinute));
+			// let minutes = Math.floor((distance % (msInSecond * secondsInMinute)) / (msInSecond * secondsInMinute));
+			// console.log("seconds: ", seconds, " minutes: ", minutes);
+			// console.log("distance: ", distance);
+
+			$('#time').html(`${minutes}:${seconds}`);
+
+			
+			}
+
+			// clearInterval();
+
+		, 1000);
+		// setInterval(updateTimer, 1000);
+		
+
+		$('#start').click(function(){
+			
+		});	
+
+		});
+			
+
+	</script>
+</body>
+
+</html>
